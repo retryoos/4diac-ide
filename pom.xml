@@ -189,6 +189,7 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<product>org.eclipse.platform.ide</product>
+					<argLine>-XstartOnFirstThread</argLine>
 				</configuration>
 			</plugin>
 			<plugin>
