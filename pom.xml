@@ -291,6 +291,25 @@
 			</properties>
 		</profile>
 		<profile>
+		    <id>macosx-ui-test-fix</id>
+		    <activation>
+		        <os>
+		            <family>mac</family>
+		        </os>
+		    </activation>
+		    <build>
+		        <plugins>
+		            <plugin>
+		                <groupId>org.eclipse.tycho</groupId>
+		                <artifactId>tycho-surefire-plugin</artifactId>
+		                <configuration>
+		                    <argLine>-XstartOnFirstThread</argLine>
+		                </configuration>
+		            </plugin>
+		        </plugins>
+		    </build>
+		</profile>
+		<profile>
 			<id>eclipse-sign</id>
 			<build>
 				<plugins>
