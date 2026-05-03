@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *******************************************************************************
+ * Copyright (c) 2017, 2026 Contributors to the Eclipse Foundation
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * https://www.eclipse.org/legal/epl-2.0/.
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *   See git history
+ *******************************************************************************
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -20,7 +34,7 @@
 		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.release/>
 		<tycho.version>5.0.2</tycho.version>  <!-- when updating this version also update .mvn/extensions.xml -->
-		<tycho-repo.url>https://download.eclipse.org/releases/2026-03</tycho-repo.url>
+		<tycho-repo.url>https://download.eclipse.org/releases/2026-06</tycho-repo.url>
 		<sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
@@ -33,8 +47,8 @@
         <eclipse.cbi.version>1.5.4</eclipse.cbi.version>
         <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
         <maven-resources-plugin-version>3.5.0</maven-resources-plugin-version>
-        <tycho.surefire.argLine></tycho.surefire.argLine>
-        </properties>
+  		  <tycho.surefire.argLine></tycho.surefire.argLine>
+	</properties>
 
 	<repositories>
 		<repository>
@@ -93,7 +107,7 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.eclipse.xtend</groupId>
+				<groupId>org.eclipse.xtext</groupId>
 				<artifactId>xtend-maven-plugin</artifactId>
 				<version>${xtend-version}</version>
 				<executions>
@@ -252,7 +266,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.eclipse.xtend</groupId>
+			<groupId>org.eclipse.xtext</groupId>
 			<artifactId>org.eclipse.xtend.lib</artifactId>
 			<version>${xtend-version}</version>
 		</dependency>

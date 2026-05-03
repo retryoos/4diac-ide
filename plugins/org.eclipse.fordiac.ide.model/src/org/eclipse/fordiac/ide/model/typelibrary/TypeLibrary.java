@@ -80,7 +80,7 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	private IProject project;
 	private Buildpath buildpath;
-	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
+	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary(this);
 	private final Map<String, AdapterTypeEntry> adapterTypes = new ConcurrentHashMap<>();
 	private final Map<String, AttributeTypeEntry> attributeTypes = new ConcurrentHashMap<>();
 	private final Map<String, DeviceTypeEntry> deviceTypes = new ConcurrentHashMap<>();
@@ -283,15 +283,18 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 	}
 
 	public void addTypeEntryNameReference(final TypeEntry entry) {
+		boolean typeEntryAdded;
 		if (entry instanceof final DataTypeEntry dtEntry) {
-			if (!dataTypeLib.addTypeEntry(dtEntry)) {
+			typeEntryAdded = dataTypeLib.addTypeEntry(dtEntry);
+			if (!typeEntryAdded) {
 				handleDuplicateTypeName(entry);
 			}
 		} else {
 			// remove stale error marker data type
 			final TypeEntry oldEntry = removeErrorTypeEntry(entry);
 			// add new type entry
-			if (!addBlockTypeEntry(entry)) {
+			typeEntryAdded = addBlockTypeEntry(entry);
+			if (!typeEntryAdded) {
 				handleDuplicateTypeName(entry);
 			}
 			// trigger transitive refresh after new entry has been added
@@ -299,8 +302,15 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 				oldEntry.setTypeLibrary(null);
 			}
 		}
-		if (isProgramTypeEntry(entry) && !addProgramTypeEntry(entry)) {
-			handleDuplicateTypeName(entry);
+		boolean programTypeEntryAdded = true;
+		if (isProgramTypeEntry(entry)) {
+			programTypeEntryAdded = addProgramTypeEntry(entry);
+			if (!programTypeEntryAdded) {
+				handleDuplicateTypeName(entry);
+			}
+		}
+		if (typeEntryAdded && programTypeEntryAdded) {
+			deleteTypeLibraryMarkers(entry.getFile());
 		}
 		addPackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
 		if (eNotificationRequired() && isPublicNameReference(entry)) {
