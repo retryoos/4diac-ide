@@ -190,7 +190,7 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<product>org.eclipse.platform.ide</product>
-					<argLine>${tycho.surefire.argLine}</argLine>
+					<argLine>${tycho.testArgLine} ${tycho.surefire.argLine}</argLine>
 				</configuration>
 			</plugin>
 			<plugin>
