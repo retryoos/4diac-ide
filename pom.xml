@@ -32,8 +32,9 @@
         <xtend-java-version>21</xtend-java-version>
         <eclipse.cbi.version>1.5.4</eclipse.cbi.version>
         <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
-        <maven-resources-plugin-version>3.4.0</maven-resources-plugin-version>
-	</properties>
+        <maven-resources-plugin-version>3.5.0</maven-resources-plugin-version>
+        <tycho.surefire.argLine></tycho.surefire.argLine>
+        </properties>
 
 	<repositories>
 		<repository>
@@ -175,6 +176,7 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<product>org.eclipse.platform.ide</product>
+					<argLine>${tycho.surefire.argLine}</argLine>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -297,17 +299,9 @@
 		            <family>mac</family>
 		        </os>
 		    </activation>
-		    <build>
-		        <plugins>
-		            <plugin>
-		                <groupId>org.eclipse.tycho</groupId>
-		                <artifactId>tycho-surefire-plugin</artifactId>
-		                <configuration>
-		                    <argLine>-XstartOnFirstThread</argLine>
-		                </configuration>
-		            </plugin>
-		        </plugins>
-		    </build>
+		    <properties>
+		        <tycho.surefire.argLine>-XstartOnFirstThread</tycho.surefire.argLine>
+		    </properties>
 		</profile>
 		<profile>
 			<id>eclipse-sign</id>
