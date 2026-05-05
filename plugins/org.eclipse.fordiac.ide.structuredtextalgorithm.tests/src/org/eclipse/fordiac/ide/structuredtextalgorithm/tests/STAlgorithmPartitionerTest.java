@@ -33,18 +33,18 @@ import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.testing.InjectWith;
-import org.eclipse.xtext.testing.extensions.InjectionExtension;
+import org.eclipse.xtext.testing.XtextRunner;
+import org.junit.runner.RunWith;
 import org.eclipse.xtext.testing.util.ParseHelper;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
 
 import com.google.inject.Inject;
 
 @SuppressWarnings("nls")
-@ExtendWith(InjectionExtension.class)
+@RunWith(XtextRunner.class)
 @InjectWith(STAlgorithmInjectorProvider.class)
-class STAlgorithmPartitionerTest {
+public class STAlgorithmPartitionerTest {
 
 	protected static TypeLibrary typeLib;
 
@@ -55,17 +55,17 @@ class STAlgorithmPartitionerTest {
 	private STCorePartitioner partitioner;
 
 	@BeforeAll
-	static void setup() {
+	public static void setup() {
 		typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null);
 	}
 
 	@Test
-	void testCombineNull() {
+	public void testCombineNull() {
 		assertEquals("", partitioner.combine(null));
 	}
 
 	@Test
-	void testCombine() {
+	public void testCombine() {
 		final SimpleFBType fbType = createSimpleFBType();
 		final String text = """
 				ALGORITHM REQ
@@ -77,7 +77,7 @@ class STAlgorithmPartitionerTest {
 	}
 
 	@Test
-	void testCombineCommentsAndStrings() {
+	public void testCombineCommentsAndStrings() {
 		final SimpleFBType fbType = createSimpleFBType();
 		final String algorithm = """
 				// ALGORITHM
@@ -94,7 +94,7 @@ class STAlgorithmPartitionerTest {
 	}
 
 	@Test
-	void testCombineLegacy() {
+	public void testCombineLegacy() {
 		final SimpleFBType fbType = createSimpleFBType();
 		final String text = """
 				ALGORITHM REQ
@@ -105,7 +105,7 @@ class STAlgorithmPartitionerTest {
 	}
 
 	@Test
-	void testCombineMethod() {
+	public void testCombineMethod() {
 		final SimpleFBType fbType = createSimpleFBType();
 		final String algorithm = """
 				ALGORITHM REQ
@@ -121,7 +121,7 @@ class STAlgorithmPartitionerTest {
 	}
 
 	@Test
-	void testCombineMethodLegacy() {
+	public void testCombineMethodLegacy() {
 		final SimpleFBType fbType = createSimpleFBType();
 		final String algorithm = """
 				ALGORITHM REQ
@@ -137,7 +137,7 @@ class STAlgorithmPartitionerTest {
 	}
 
 	@Test
-	void testPartition() throws Exception {
+	public void testPartition() throws Exception {
 		assertCallablesEquals(List.of(), partition(""));
 		assertCallablesEquals(List.of("error"), partition("error"));
 		final String algorithm = """
@@ -153,7 +153,7 @@ class STAlgorithmPartitionerTest {
 	}
 
 	@Test
-	void testPartitionComment() throws Exception {
+	public void testPartitionComment() throws Exception {
 		final String text = """
 				/*
 				 * test comment 1

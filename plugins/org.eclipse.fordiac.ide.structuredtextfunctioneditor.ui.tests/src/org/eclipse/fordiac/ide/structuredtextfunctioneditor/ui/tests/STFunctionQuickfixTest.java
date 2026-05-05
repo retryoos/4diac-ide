@@ -15,17 +15,17 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.tests;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator;
 import org.eclipse.xtext.diagnostics.Diagnostic;
 import org.eclipse.xtext.testing.InjectWith;
-import org.eclipse.xtext.testing.extensions.InjectionExtension;
+import org.eclipse.xtext.testing.XtextRunner;
 import org.eclipse.xtext.ui.testing.AbstractQuickfixTest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @SuppressWarnings("nls")
-@ExtendWith(InjectionExtension.class)
+@RunWith(XtextRunner.class)
 @InjectWith(STFunctionUiInjectorProvider.class)
-class STFunctionQuickfixTest extends AbstractQuickfixTest {
+public class STFunctionQuickfixTest extends AbstractQuickfixTest {
 	@Test
-	void fixNonCompatibleTypes() {
+	public void fixNonCompatibleTypes() {
 		testQuickfixesOn("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -47,7 +47,7 @@ class STFunctionQuickfixTest extends AbstractQuickfixTest {
 	}
 
 	@Test
-	void fixUnnecessaryLiteralConversion() {
+	public void fixUnnecessaryLiteralConversion() {
 		testQuickfixesOn("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -67,7 +67,7 @@ class STFunctionQuickfixTest extends AbstractQuickfixTest {
 	}
 
 	@Test
-	void fixTruncatingLiteralConversion() {
+	public void fixTruncatingLiteralConversion() {
 		testQuickfixesOn("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -87,7 +87,7 @@ class STFunctionQuickfixTest extends AbstractQuickfixTest {
 	}
 
 	@Test
-	void fixTruncatingUnsignedLiteralConversion() {
+	public void fixTruncatingUnsignedLiteralConversion() {
 		testQuickfixesOn("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -107,7 +107,7 @@ class STFunctionQuickfixTest extends AbstractQuickfixTest {
 	}
 
 	@Test
-	void fixMissingVariable() {
+	public void fixMissingVariable() {
 		testQuickfixesOn("""
 				FUNCTION TEST
 				X := 17; // test comment
@@ -161,7 +161,7 @@ class STFunctionQuickfixTest extends AbstractQuickfixTest {
 	}
 
 	@Test
-	void fixMissingVariableExpression() {
+	public void fixMissingVariableExpression() {
 		testQuickfixesOn("""
 				FUNCTION TEST
 				X := DINT#17 = 4; // test comment

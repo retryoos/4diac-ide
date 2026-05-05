@@ -35,18 +35,18 @@ import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.testing.InjectWith;
-import org.eclipse.xtext.testing.extensions.InjectionExtension;
+import org.eclipse.xtext.testing.XtextRunner;
+import org.junit.runner.RunWith;
 import org.eclipse.xtext.testing.util.ParseHelper;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
 
 import com.google.inject.Inject;
 
 @SuppressWarnings("nls")
-@ExtendWith(InjectionExtension.class)
+@RunWith(XtextRunner.class)
 @InjectWith(GlobalConstantsInjectorProvider.class)
-class GlobalConstantsPartitionerTest {
+public class GlobalConstantsPartitionerTest {
 
 	protected static TypeLibrary typeLib;
 
@@ -57,17 +57,17 @@ class GlobalConstantsPartitionerTest {
 	private STCorePartitioner partitioner;
 
 	@BeforeAll
-	static void setup() {
+	public static void setup() {
 		typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null);
 	}
 
 	@Test
-	void testCombineNull() {
+	public void testCombineNull() {
 		assertEquals("", partitioner.combine(null));
 	}
 
 	@Test
-	void testCombine() {
+	public void testCombine() {
 		final GlobalConstants globalConstants = createGlobalConstants();
 		final String text = """
 				GLOBALCONSTANTS TEST
@@ -81,7 +81,7 @@ class GlobalConstantsPartitionerTest {
 	}
 
 	@Test
-	void testCombineNoSource() {
+	public void testCombineNoSource() {
 		final GlobalConstants globalConstants = createGlobalConstants();
 		assertEquals("""
 				GLOBALCONSTANTS TEST
@@ -100,7 +100,7 @@ class GlobalConstantsPartitionerTest {
 	}
 
 	@Test
-	void testPartition() throws Exception {
+	public void testPartition() throws Exception {
 		assertConstantsEquals(List.of(), partition(""));
 		assertConstantsEquals(List.of(), partition("error"));
 		assertConstantsEquals(List.of(createVarDeclaration("PI", ElementaryTypes.REAL, null, "3.14159")), partition("""

@@ -37,18 +37,18 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionPartition;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.testing.InjectWith;
-import org.eclipse.xtext.testing.extensions.InjectionExtension;
+import org.eclipse.xtext.testing.XtextRunner;
+import org.junit.runner.RunWith;
 import org.eclipse.xtext.testing.util.ParseHelper;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
 
 import com.google.inject.Inject;
 
 @SuppressWarnings("nls")
-@ExtendWith(InjectionExtension.class)
+@RunWith(XtextRunner.class)
 @InjectWith(STFunctionInjectorProvider.class)
-class STFunctionPartitionerTest {
+public class STFunctionPartitionerTest {
 
 	protected static TypeLibrary typeLib;
 
@@ -59,17 +59,17 @@ class STFunctionPartitionerTest {
 	private STCorePartitioner partitioner;
 
 	@BeforeAll
-	static void setup() {
+	public static void setup() {
 		typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null);
 	}
 
 	@Test
-	void testCombineNull() {
+	public void testCombineNull() {
 		assertEquals("", partitioner.combine(null));
 	}
 
 	@Test
-	void testCombineBody() {
+	public void testCombineBody() {
 		final FunctionFBType fbType = createFunctionFBType();
 		final String text = """
 				FUNCTION TEST
@@ -81,7 +81,7 @@ class STFunctionPartitionerTest {
 	}
 
 	@Test
-	void testCombineNoBody() {
+	public void testCombineNoBody() {
 		final FunctionFBType fbType = createFunctionFBType();
 		// empty
 		assertEquals("""
@@ -190,7 +190,7 @@ class STFunctionPartitionerTest {
 	}
 
 	@Test
-	void testPartition() throws Exception {
+	public void testPartition() throws Exception {
 		assertFunctionsEquals(List.of(), partition(""));
 		assertFunctionsEquals(List.of("error"), partition("error"));
 		final String function = """

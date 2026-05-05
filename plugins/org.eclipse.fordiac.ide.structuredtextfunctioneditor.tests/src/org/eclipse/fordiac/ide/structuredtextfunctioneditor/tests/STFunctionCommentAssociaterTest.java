@@ -25,17 +25,17 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCommentPosition;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.testing.InjectWith;
-import org.eclipse.xtext.testing.extensions.InjectionExtension;
+import org.eclipse.xtext.testing.XtextRunner;
+import org.junit.runner.RunWith;
 import org.eclipse.xtext.testing.util.ParseHelper;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
 
 import com.google.inject.Inject;
 
-@ExtendWith(InjectionExtension.class)
+@RunWith(XtextRunner.class)
 @InjectWith(STFunctionInjectorProvider.class)
 @SuppressWarnings({ "nls", "squid:S2479" })
-class STFunctionCommentAssociaterTest {
+public class STFunctionCommentAssociaterTest {
 
 	private static final Pattern SL_COMMENT_PATTERN = Pattern.compile("// (\\w+) (.*)\\R"); //$NON-NLS-1$
 	private static final Pattern ML_COMMENT_PATTERN = Pattern.compile("/\\* (\\w+) (.*)\\*/", Pattern.DOTALL); //$NON-NLS-1$
@@ -47,7 +47,7 @@ class STFunctionCommentAssociaterTest {
 	STCoreCommentAssociater commentAssociater;
 
 	@Test
-	void emptyFunctionDeclarationSL() throws Exception {
+	public void emptyFunctionDeclarationSL() throws Exception {
 		final STFunctionSource source = parseHelper.parse("""
 				// BEFORE FUNCTION
 				FUNCTION test // INNER FUNCTION
@@ -60,7 +60,7 @@ class STFunctionCommentAssociaterTest {
 	}
 
 	@Test
-	void emptyFunctionDeclarationML() throws Exception {
+	public void emptyFunctionDeclarationML() throws Exception {
 		final STFunctionSource source = parseHelper.parse("""
 				/* BEFORE FUNCTION
 				 */
@@ -78,7 +78,7 @@ class STFunctionCommentAssociaterTest {
 	}
 
 	@Test
-	void simpleFunctionDeclarationSL() throws Exception {
+	public void simpleFunctionDeclarationSL() throws Exception {
 		final STFunctionSource source = parseHelper.parse("""
 				// BEFORE FUNCTION
 				FUNCTION test // BEFORE VAR_TEMP
@@ -97,7 +97,7 @@ class STFunctionCommentAssociaterTest {
 	}
 
 	@Test
-	void simpleFunctionDeclarationML() throws Exception {
+	public void simpleFunctionDeclarationML() throws Exception {
 		final STFunctionSource source = parseHelper.parse("""
 				/* BEFORE FUNCTION
 				 */
@@ -118,7 +118,7 @@ class STFunctionCommentAssociaterTest {
 	}
 
 	@Test
-	void simpleAssignmentsSL() throws Exception {
+	public void simpleAssignmentsSL() throws Exception {
 		final STFunctionSource source = parseHelper.parse("""
 				FUNCTION test
 				VAR_TEMP
@@ -137,7 +137,7 @@ class STFunctionCommentAssociaterTest {
 	}
 
 	@Test
-	void simpleAssignmentsML() throws Exception {
+	public void simpleAssignmentsML() throws Exception {
 		final STFunctionSource source = parseHelper.parse("""
 				FUNCTION test
 				VAR_TEMP
@@ -156,7 +156,7 @@ class STFunctionCommentAssociaterTest {
 	}
 
 	@Test
-	void emptyBlocksSL() throws Exception {
+	public void emptyBlocksSL() throws Exception {
 		final STFunctionSource source = parseHelper.parse("""
 				FUNCTION test
 				VAR_TEMP
@@ -183,7 +183,7 @@ class STFunctionCommentAssociaterTest {
 	}
 
 	@Test
-	void emptyBlocksML() throws Exception {
+	public void emptyBlocksML() throws Exception {
 		final STFunctionSource source = parseHelper.parse("""
 				FUNCTION test
 				VAR_TEMP
@@ -210,7 +210,7 @@ class STFunctionCommentAssociaterTest {
 	}
 
 	@Test
-	void simpleBlocksSL() throws Exception {
+	public void simpleBlocksSL() throws Exception {
 		final STFunctionSource source = parseHelper.parse("""
 				FUNCTION test
 				VAR_TEMP
@@ -241,7 +241,7 @@ class STFunctionCommentAssociaterTest {
 	}
 
 	@Test
-	void simpleBlocksML() throws Exception {
+	public void simpleBlocksML() throws Exception {
 		final STFunctionSource source = parseHelper.parse("""
 				FUNCTION test
 				VAR_TEMP
@@ -272,7 +272,7 @@ class STFunctionCommentAssociaterTest {
 	}
 
 	@Test
-	void complexML() throws Exception {
+	public void complexML() throws Exception {
 		final STFunctionSource source = parseHelper
 				.parse("""
 						FUNCTION /* INNER FUNCTION */ test

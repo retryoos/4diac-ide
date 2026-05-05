@@ -30,10 +30,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
 import org.eclipse.xtext.testing.InjectWith;
-import org.eclipse.xtext.testing.extensions.InjectionExtension;
+import org.eclipse.xtext.testing.XtextRunner;
+import org.junit.runner.RunWith;
 import org.eclipse.xtext.testing.util.ParseHelper;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -41,9 +41,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.google.inject.Inject;
 
 @SuppressWarnings("nls")
-@ExtendWith(InjectionExtension.class)
+@RunWith(XtextRunner.class)
 @InjectWith(STFunctionInjectorProvider.class)
-class TypeInferenceTest {
+public class TypeInferenceTest {
 	@Inject
 	private ParseHelper<STFunctionSource> parseHelper;
 
@@ -67,7 +67,7 @@ class TypeInferenceTest {
 
 	@ParameterizedTest(name = "{0} := {1};")
 	@MethodSource
-	void testSimpleAssignment(final String typeName, final String value, final String resultTypeName,
+	public void testSimpleAssignment(final String typeName, final String value, final String resultTypeName,
 			final String declaredResultTypeName) throws Exception {
 		final var result = parseHelper.parse("""
 					FUNCTION test
@@ -111,7 +111,7 @@ class TypeInferenceTest {
 
 	@ParameterizedTest(name = "{0} := {2} {1} {3};")
 	@MethodSource
-	void testBinaryExpression(final String typeName, final String operator, final String value1, final String value2,
+	public void testBinaryExpression(final String typeName, final String operator, final String value1, final String value2,
 			final String exprResultTypeName, final String exprDeclaredResultTypeName, final String leftResultTypeName,
 			final String leftDeclaredResultTypeName) throws Exception {
 		final var result = parseHelper.parse("""
@@ -162,7 +162,7 @@ class TypeInferenceTest {
 
 	@ParameterizedTest(name = "{0} := {1}({2}, {3});")
 	@MethodSource
-	void testStandardFunctionCall(final String typeName, final String function, final String value1,
+	public void testStandardFunctionCall(final String typeName, final String function, final String value1,
 			final String value2, final String callResultTypeName, final String callDeclaredResultTypeName,
 			final String argumentResultTypeName, final String argumentDeclaredResultTypeName) throws Exception {
 		final var result = parseHelper.parse("""
@@ -271,7 +271,7 @@ class TypeInferenceTest {
 
 	@ParameterizedTest(name = "{0} := {1}({3} {2} {4}, {5});")
 	@MethodSource
-	void testStandardFunctionCallWithBinaryExpression(final String typeName, final String function,
+	public void testStandardFunctionCallWithBinaryExpression(final String typeName, final String function,
 			final String operator, final String value1, final String value2, final String value3,
 			final String callResultTypeName, final String callDeclaredResultTypeName,
 			final String argumentResultTypeName, final String argumentDeclaredResultTypeName,
@@ -308,7 +308,7 @@ class TypeInferenceTest {
 	}
 
 	@Test
-	void testNestedBinaryExpression() throws Exception {
+	public void testNestedBinaryExpression() throws Exception {
 		final var result = parseHelper.parse("""
 					FUNCTION test
 					VAR_TEMP
@@ -342,7 +342,7 @@ class TypeInferenceTest {
 	}
 
 	@Test
-	void testNestedCondition() throws Exception {
+	public void testNestedCondition() throws Exception {
 		final var result = parseHelper.parse("""
 					FUNCTION test
 					VAR_TEMP

@@ -23,26 +23,26 @@ import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator;
 import org.eclipse.fordiac.ide.test.model.typelibrary.FBTypeEntryMock;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.xtext.testing.InjectWith;
-import org.eclipse.xtext.testing.extensions.InjectionExtension;
+import org.eclipse.xtext.testing.XtextRunner;
+import org.junit.runner.RunWith;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreAccess;
 import org.eclipse.xtext.ui.testing.AbstractMultiQuickfixTest;
 import org.eclipse.xtext.validation.SeverityConverter;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
 
 import com.google.inject.Inject;
 
 @SuppressWarnings("nls")
-@ExtendWith(InjectionExtension.class)
+@RunWith(XtextRunner.class)
 @InjectWith(STFunctionUiInjectorProvider.class)
-class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
+public class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 
 	@Inject
 	IPreferenceStoreAccess preferenceStoreAccess;
 
 	@BeforeEach
-	void setupSeverities() {
+	public void setupSeverities() {
 		final IPreferenceStore store = preferenceStoreAccess.getWritablePreferenceStore();
 		store.putValue(STCoreValidator.UNUSED_VARIABLE, SeverityConverter.SEVERITY_IGNORE);
 		store.putValue(STCoreValidator.UNREAD_VARIABLE, SeverityConverter.SEVERITY_IGNORE);
@@ -50,7 +50,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixExitNotInLoopSingle() {
+	public void fixExitNotInLoopSingle() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				EXIT;
@@ -70,7 +70,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixExitNotInLoopMulti() {
+	public void fixExitNotInLoopMulti() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				EXIT;
@@ -93,7 +93,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixContinueNotInLoopSingle() {
+	public void fixContinueNotInLoopSingle() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				CONTINUE;
@@ -113,7 +113,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixContinueNotInLoopMulti() {
+	public void fixContinueNotInLoopMulti() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				CONTINUE;
@@ -136,7 +136,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixTrailingUnderscoreSingle() {
+	public void fixTrailingUnderscoreSingle() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -166,7 +166,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixTrailingUnderscoreMulti() {
+	public void fixTrailingUnderscoreMulti() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -203,7 +203,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixConsecutiveUnderscoreSingle() {
+	public void fixConsecutiveUnderscoreSingle() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -233,7 +233,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixConsecutiveUnderscoreMulti() {
+	public void fixConsecutiveUnderscoreMulti() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -270,7 +270,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixVariableNameCasingSingle() {
+	public void fixVariableNameCasingSingle() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -300,7 +300,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixVariableNameCasingMulti() {
+	public void fixVariableNameCasingMulti() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -334,7 +334,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixUnnecessaryConversionSingle() {
+	public void fixUnnecessaryConversionSingle() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -364,7 +364,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixUnnecessaryConversionMulti() {
+	public void fixUnnecessaryConversionMulti() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -398,7 +398,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixUnnecessaryConversionNested() {
+	public void fixUnnecessaryConversionNested() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -429,7 +429,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixUnnecessaryNarrowConversionSingle() {
+	public void fixUnnecessaryNarrowConversionSingle() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -462,7 +462,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixUnnecessaryNarrowConversionMulti() {
+	public void fixUnnecessaryNarrowConversionMulti() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -499,7 +499,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixUnnecessaryWideConversionSingle() {
+	public void fixUnnecessaryWideConversionSingle() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -532,7 +532,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixUnnecessaryWideConversionMulti() {
+	public void fixUnnecessaryWideConversionMulti() {
 		testMultiQuickfix("""
 				FUNCTION TEST
 				VAR_TEMP
@@ -569,7 +569,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixRemoveImportSingle() {
+	public void fixRemoveImportSingle() {
 		testMultiQuickfix("""
 				IMPORT test1::type1;
 
@@ -591,7 +591,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void fixRemoveImportMulti() {
+	public void fixRemoveImportMulti() {
 		testMultiQuickfix("""
 				IMPORT test1::type1;
 				IMPORT test1::type2;
@@ -616,7 +616,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void organizeImportsSingle() {
+	public void organizeImportsSingle() {
 		// create file
 		final IFile file = dslFile("""
 				IMPORT test1::*;
@@ -652,7 +652,7 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
-	void organizeImportsMulti() {
+	public void organizeImportsMulti() {
 		// create file
 		final IFile file = dslFile("""
 				IMPORT test1::*;
