@@ -30,6 +30,8 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.fordiac.ide.library.LibraryManager;
+import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CheckConditionsOperation;
@@ -70,6 +72,20 @@ public final class RefactoringTestSupport {
 		project.open(new NullProgressMonitor());
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		return project;
+	}
+
+	/**
+	 * Link the standard libraries declared in the project's MANIFEST.MF so the type
+	 * library can resolve types like STRUCT_DEMUX at test runtime, instead of
+	 * shipping a copy in the fixture.
+	 */
+	public static void linkStandardLibraries(final IProject project) throws CoreException {
+		final var convert = LibraryManager.INSTANCE.getStandardLibraries().get("convert").stream() //$NON-NLS-1$
+				.filter(record -> "3.0.0".equals(record.version().toString())) //$NON-NLS-1$
+				.findFirst().orElseThrow();
+		LibraryManager.INSTANCE.importLibrary(project, convert.uri(), true, false);
+		LibraryManager.INSTANCE.resolveDependencies(project, ManifestHelper.getContainerManifest(project), null);
+		TypeLibraryManager.INSTANCE.getTypeLibrary(project).refresh();
 	}
 
 	/** Remove a project from the workspace and drop its cached type library. */
