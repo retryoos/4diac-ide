@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.library.LibraryManager;
-import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CheckConditionsOperation;
@@ -75,17 +74,40 @@ public final class RefactoringTestSupport {
 	}
 
 	/**
-	 * Link the standard libraries declared in the project's MANIFEST.MF so the type
-	 * library can resolve types like STRUCT_DEMUX at test runtime, instead of
+	 * Link core 3.0.0 and convert 3.0.0 from the source tree into the workspace
+	 * project so types like STRUCT_DEMUX resolve at test runtime, instead of
 	 * shipping a copy in the fixture.
+	 *
+	 * Tycho runs the test JVM with the test bundle directory as the working
+	 * directory, so the two parent segments climb from the bundle root to the
+	 * repository root, where data/typelibrary holds the standard libraries.
 	 */
 	public static void linkStandardLibraries(final IProject project) throws CoreException {
-		final var convert = LibraryManager.INSTANCE.getStandardLibraries().get("convert").stream() //$NON-NLS-1$
-				.filter(record -> "3.0.0".equals(record.version().toString())) //$NON-NLS-1$
-				.findFirst().orElseThrow();
-		LibraryManager.INSTANCE.importLibrary(project, convert.uri(), true, false);
-		LibraryManager.INSTANCE.resolveDependencies(project, ManifestHelper.getContainerManifest(project), null);
+		ensureLibraryFolders(project);
+		final java.nio.file.Path standardLibraries = java.nio.file.Path
+				.of(System.getProperty("user.dir"), "..", "..", "data", "typelibrary") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				.toAbsolutePath().normalize();
+		LibraryManager.INSTANCE.importLibrary(project, standardLibraries.resolve("core-3.0.0").toUri(), true, false); //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, standardLibraries.resolve("convert-3.0.0").toUri(), true, //$NON-NLS-1$
+				false);
+		// Drop the cached type library so the next lookup re-parses .sys and .fbt
+		// files with the freshly linked libraries in scope; a plain refresh() only
+		// reconciles added or deleted files, it does not re-parse already loaded
+		// entries that referenced types from the not-yet-linked libraries.
+		TypeLibraryManager.INSTANCE.removeProject(project);
 		TypeLibraryManager.INSTANCE.getTypeLibrary(project).refresh();
+	}
+
+	private static void ensureLibraryFolders(final IProject project) throws CoreException {
+		final NullProgressMonitor monitor = new NullProgressMonitor();
+		final org.eclipse.core.resources.IFolder standardLibs = project.getFolder("Standard Libraries"); //$NON-NLS-1$
+		if (!standardLibs.exists()) {
+			standardLibs.create(IResource.VIRTUAL | IResource.FORCE, true, monitor);
+		}
+		final org.eclipse.core.resources.IFolder externalLibs = project.getFolder("External Libraries"); //$NON-NLS-1$
+		if (!externalLibs.exists()) {
+			externalLibs.create(IResource.VIRTUAL | IResource.FORCE, true, monitor);
+		}
 	}
 
 	/** Remove a project from the workspace and drop its cached type library. */

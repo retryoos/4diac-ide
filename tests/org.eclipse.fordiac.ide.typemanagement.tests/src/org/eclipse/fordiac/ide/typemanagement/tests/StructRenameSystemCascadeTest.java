@@ -63,6 +63,7 @@ class StructRenameSystemCascadeTest {
 	void loadFixture() throws Exception {
 		final Bundle bundle = Platform.getBundle(BUNDLE_NAME);
 		project = RefactoringTestSupport.importProjectIntoWorkspace(PROJECT_NAME, bundle, new Path(PROJECT_PATH));
+		RefactoringTestSupport.linkStandardLibraries(project);
 		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 	}
 
