@@ -20,6 +20,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Comparator;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -32,6 +33,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CheckConditionsOperation;
 import org.eclipse.ltk.core.refactoring.CreateChangeOperation;
@@ -74,13 +76,8 @@ public final class RefactoringTestSupport {
 	}
 
 	/**
-	 * Link core 3.0.0 and convert 3.0.0 from the source tree into the workspace
-	 * project so types like STRUCT_DEMUX resolve at test runtime, instead of
-	 * shipping a copy in the fixture.
-	 *
-	 * Tycho runs the test JVM with the test bundle directory as the working
-	 * directory, so the two parent segments climb from the bundle root to the
-	 * repository root, where data/typelibrary holds the standard libraries.
+	 * Link core 3.0.0 and convert 3.0.0 from the source tree so types like
+	 * STRUCT_DEMUX resolve at test runtime instead of being copied into the fixture.
 	 */
 	public static void linkStandardLibraries(final IProject project) throws CoreException {
 		ensureLibraryFolders(project);
@@ -90,21 +87,19 @@ public final class RefactoringTestSupport {
 		LibraryManager.INSTANCE.importLibrary(project, standardLibraries.resolve("core-3.0.0").toUri(), true, false); //$NON-NLS-1$
 		LibraryManager.INSTANCE.importLibrary(project, standardLibraries.resolve("convert-3.0.0").toUri(), true, //$NON-NLS-1$
 				false);
-		// Drop the cached type library so the next lookup re-parses .sys and .fbt
-		// files with the freshly linked libraries in scope; a plain refresh() only
-		// reconciles added or deleted files, it does not re-parse already loaded
-		// entries that referenced types from the not-yet-linked libraries.
+		// refresh() only reconciles added or deleted files; drop the cached
+		// TypeLibrary so .sys entries re-parse with the linked libraries in scope.
 		TypeLibraryManager.INSTANCE.removeProject(project);
 		TypeLibraryManager.INSTANCE.getTypeLibrary(project).refresh();
 	}
 
 	private static void ensureLibraryFolders(final IProject project) throws CoreException {
 		final NullProgressMonitor monitor = new NullProgressMonitor();
-		final org.eclipse.core.resources.IFolder standardLibs = project.getFolder("Standard Libraries"); //$NON-NLS-1$
+		final IFolder standardLibs = project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME);
 		if (!standardLibs.exists()) {
 			standardLibs.create(IResource.VIRTUAL | IResource.FORCE, true, monitor);
 		}
-		final org.eclipse.core.resources.IFolder externalLibs = project.getFolder("External Libraries"); //$NON-NLS-1$
+		final IFolder externalLibs = project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		if (!externalLibs.exists()) {
 			externalLibs.create(IResource.VIRTUAL | IResource.FORCE, true, monitor);
 		}
