@@ -66,7 +66,7 @@ class StructDataTypeRenameTest {
 	void loadFixture() throws Exception {
 		final Bundle bundle = Platform.getBundle(BUNDLE_NAME);
 		project = RefactoringTestSupport.importProjectIntoWorkspace(PROJECT_NAME, bundle, new Path(PROJECT_PATH));
-		RefactoringTestSupport.linkStandardLibraries(project);
+		RefactoringTestSupport.linkStandardLibraries(project, "core-3.0.0", "convert-3.0.0"); //$NON-NLS-1$ //$NON-NLS-2$
 		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 	}
 
@@ -89,23 +89,23 @@ class StructDataTypeRenameTest {
 	@Test
 	void renameInnerStruct_updatesDataTypeNameInLibrary() throws Exception {
 		assertEquals(OLD_NAME, structuredType(INNER_STRUCT).getName());
-		assertTypeEntry(file(INNER_FILE), INNER_STRUCT);
+		assertTypeEntryFullTypeNameEqual(file(INNER_FILE), INNER_STRUCT);
 
 		renameInnerStruct();
 
 		assertEquals(NEW_NAME, structuredType(INNER_STRUCT_RENAMED).getName());
-		assertTypeEntry(file(RENAMED_FILE), INNER_STRUCT_RENAMED);
+		assertTypeEntryFullTypeNameEqual(file(RENAMED_FILE), INNER_STRUCT_RENAMED);
 	}
 
 	@Test
 	void renameInnerStruct_updatesOuterStructMemberReference() throws Exception {
 		assertOuterMember(OLD_NAME, INNER_STRUCT);
-		assertTypeEntry(file(INNER_FILE), INNER_STRUCT);
+		assertTypeEntryFullTypeNameEqual(file(INNER_FILE), INNER_STRUCT);
 
 		renameInnerStruct();
 
 		assertOuterMember(NEW_NAME, INNER_STRUCT_RENAMED);
-		assertTypeEntry(file(RENAMED_FILE), INNER_STRUCT_RENAMED);
+		assertTypeEntryFullTypeNameEqual(file(RENAMED_FILE), INNER_STRUCT_RENAMED);
 	}
 
 	// Undo renames the .dtp file back but leaves its internal DataType name as
@@ -146,7 +146,7 @@ class StructDataTypeRenameTest {
 		assertEquals(expectedQualifiedType, PackageNameHelper.getFullTypeName(inner.getType()));
 	}
 
-	private void assertTypeEntry(final IFile typeFile, final String expectedFullTypeName) {
+	private void assertTypeEntryFullTypeNameEqual(final IFile typeFile, final String expectedFullTypeName) {
 		final TypeEntry entry = typeLibrary.getTypeEntry(typeFile);
 		assertNotNull(entry);
 		assertFalse(entry.hasError());

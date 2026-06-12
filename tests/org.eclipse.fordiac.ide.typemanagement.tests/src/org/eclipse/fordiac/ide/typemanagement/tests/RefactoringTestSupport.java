@@ -76,17 +76,17 @@ public final class RefactoringTestSupport {
 	}
 
 	/**
-	 * Link core 3.0.0 and convert 3.0.0 from the source tree so types like
-	 * STRUCT_DEMUX resolve at test runtime instead of being copied into the fixture.
+	 * Link the given standard libraries from the source tree so types they declare
+	 * resolve at test runtime instead of being copied into the fixture.
 	 */
-	public static void linkStandardLibraries(final IProject project) throws CoreException {
+	public static void linkStandardLibraries(final IProject project, final String... libraryNames) throws CoreException {
 		ensureLibraryFolders(project);
 		final java.nio.file.Path standardLibraries = java.nio.file.Path
 				.of(System.getProperty("user.dir"), "..", "..", "data", "typelibrary") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				.toAbsolutePath().normalize();
-		LibraryManager.INSTANCE.importLibrary(project, standardLibraries.resolve("core-3.0.0").toUri(), true, false); //$NON-NLS-1$
-		LibraryManager.INSTANCE.importLibrary(project, standardLibraries.resolve("convert-3.0.0").toUri(), true, //$NON-NLS-1$
-				false);
+		for (final String libraryName : libraryNames) {
+			LibraryManager.INSTANCE.importLibrary(project, standardLibraries.resolve(libraryName).toUri(), true, false);
+		}
 		// refresh() only reconciles added or deleted files; drop the cached
 		// TypeLibrary so .sys entries re-parse with the linked libraries in scope.
 		TypeLibraryManager.INSTANCE.removeProject(project);
