@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="FBTypeDeleteNestedSubAppTest" Comment="">
+	<VersionInfo Version="1.0" Author="Dimitrios Kalligaridis" Date="2026-06-15">
+	</VersionInfo>
+	<Application Name="App" Comment="">
+		<SubAppNetwork>
+			<FB Name="TopInstance" Type="mypackage::MyBlock" Comment="" x="500.0" y="500.0">
+			</FB>
+			<SubApp Name="Container" Comment="" x="1500.0" y="500.0">
+				<SubAppInterfaceList>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<FB Name="NestedInstance" Type="mypackage::MyBlock" Comment="" x="500.0" y="500.0">
+					</FB>
+					<SubApp Name="DeepContainer" Comment="" x="1500.0" y="500.0">
+						<SubAppInterfaceList>
+						</SubAppInterfaceList>
+						<SubAppNetwork>
+							<FB Name="DeeplyNestedInstance" Type="mypackage::MyBlock" Comment="" x="500.0" y="500.0">
+							</FB>
+						</SubAppNetwork>
+					</SubApp>
+				</SubAppNetwork>
+			</SubApp>
+		</SubAppNetwork>
+	</Application>
+</System>
