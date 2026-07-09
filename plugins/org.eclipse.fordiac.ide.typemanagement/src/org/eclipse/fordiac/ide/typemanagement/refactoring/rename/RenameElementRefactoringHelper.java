@@ -83,9 +83,8 @@ public final class RenameElementRefactoringHelper {
 			final ContainerVarDeclaration element, final IInterfaceElement interfaceElement, final String newName) {
 		final BlockFBNetworkElement blockElement = element.getBlockFBNetworkElement();
 		if (blockElement != null) {
-			final List<String> path = new ArrayList<>(element.getBlockRelativePath());
-			path.addAll(interfaceElement.getBlockRelativePath());
-			final IInterfaceElement instancePin = blockElement.getInterface().getInterfaceElement(path);
+			final IInterfaceElement instancePin = element.getCachedMember(interfaceElement.getBlockRelativePath(),
+					false);
 			if (instancePin != null) {
 				modelEdits.add(new RenameElementModelEdit(
 						MessageFormat.format(Messages.RenameElementRefactoringProcessor_RenamePinInInstance,
@@ -97,8 +96,7 @@ public final class RenameElementRefactoringHelper {
 
 	private static void createRenameInterfaceChanges(final List<ModelEdit<?>> modelEdits,
 			final BlockFBNetworkElement element, final IInterfaceElement interfaceElement, final String newName) {
-		final IInterfaceElement instancePin = element.getInterface()
-				.getInterfaceElement(List.of(interfaceElement.getName()));
+		final IInterfaceElement instancePin = element.getInterface().getInterfaceElement(interfaceElement);
 		if (instancePin != null) {
 			modelEdits.add(new RenameElementModelEdit(MessageFormat
 					.format(Messages.RenameElementRefactoringProcessor_RenamePinInInstance, interfaceElement.getName()),
